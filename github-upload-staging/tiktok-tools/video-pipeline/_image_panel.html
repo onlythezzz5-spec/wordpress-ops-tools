@@ -1,0 +1,25 @@
+  <!-- ====== Image Tab ====== -->
+  <div id="mainImage" style="display:none">
+    <div style="margin-bottom:20px">
+      <button class="btn btn-primary" onclick="showNewImageProject()">+ 新建生图项目</button>
+    </div>
+    <div id="imageProjectList"></div>
+    <div id="imageProjectDetail" style="display:none"></div>
+  </div>
+
+  <!-- New Image Project Modal -->
+  <div class="modal-overlay" id="newImageProjectModal">
+    <div class="modal" style="width:440px">
+      <h3>新建 GPT 生图项目</h3>
+      <input type="text" id="imgProjectName" placeholder="项目名称">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
+        <div><label style="font-size:10px;color:var(--dim);font-weight:600">风格预设</label><select id="imgStyle" style="width:100%;padding:8px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:12px"></select></div>
+        <div><label style="font-size:10px;color:var(--dim);font-weight:600">比例</label><select id="imgRatio" style="width:100%;padding:8px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:12px"><option value="1:1">1:1 正方形</option><option value="9:16">9:16 竖版 (TikTok)</option><option value="4:5">4:5 竖向 (Ins)</option><option value="3:4">3:4 产品详情</option><option value="16:9">16:9 横版</option></select></div>
+      </div>
+      <div class="actions">
+        <button class="btn btn-outline btn-sm" onclick="hideModal('newImageProjectModal')">取消</button>
+        <button class="btn btn-primary btn-sm" onclick="createImageProject()">创建</button>
+      </div>
+    </div>
+  </div>
+</div>

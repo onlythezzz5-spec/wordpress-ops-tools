@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ozon 商品图工作台</title>
+<style>
+
+:root{--bg:#090b10;--bg2:#0e1118;--card:#141a24;--brd:#273142;--tx:#eef3fb;--mut:#a8b3c6;--dim:#6f7c91;--ac:#71d7ff;--ac2:#8b7cff;--gr:#4ade80;--rd:#ff6b6b;--pk:#ff4d83;--shadow:0 22px 60px rgba(0,0,0,.35);--soft:0 10px 30px rgba(0,0,0,.22)}
+*{box-sizing:border-box;margin:0;padding:0}html{background:var(--bg)}body{min-height:100vh;background:radial-gradient(circle at 18% -8%,rgba(113,215,255,.16),transparent 34%),radial-gradient(circle at 86% 4%,rgba(139,124,255,.14),transparent 30%),linear-gradient(180deg,#090b10 0%,#0b0f16 42%,#090b10 100%);color:var(--tx);font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI','Microsoft YaHei',sans-serif}button{cursor:pointer;font-family:inherit;border:none;outline:none}input,textarea,select{font-family:inherit;outline:none}.app{max-width:1540px;margin:0 auto;padding:24px 28px 42px}
+.header{position:sticky;top:0;z-index:30;display:flex;justify-content:space-between;align-items:center;gap:16px;margin:-24px -28px 22px;padding:18px 28px;background:rgba(9,11,16,.78);backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,255,.07)}.header h1{font-size:18px;font-weight:800}.header h1 span{color:var(--ac);text-shadow:0 0 24px rgba(113,215,255,.55)}.tabs{display:flex;gap:6px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:4px}.tab-btn{padding:9px 18px;border-radius:9px;font-size:12px;font-weight:750;background:transparent;color:var(--mut);transition:all .18s}.tab-btn:hover{color:var(--tx);background:rgba(255,255,255,.05)}.tab-btn.active{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#081019;box-shadow:0 10px 28px rgba(113,215,255,.22)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:34px;padding:8px 15px;border-radius:9px;font-size:12px;font-weight:750;transition:transform .16s,filter .16s,border-color .16s,background .16s;color:var(--tx);white-space:nowrap}.btn:hover{transform:translateY(-1px)}.btn-p,.btn-ac{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#071018;box-shadow:0 12px 28px rgba(113,215,255,.18)}.btn-gr{background:linear-gradient(135deg,#4ade80,#22d3ee);color:#06110d}.btn-o{background:rgba(255,255,255,.035);border:1px solid var(--brd);color:var(--mut)}.btn-o:hover{border-color:var(--ac);color:var(--tx);background:rgba(113,215,255,.08)}.btn-d{background:rgba(255,107,107,.06);border:1px solid rgba(255,107,107,.38);color:#ff8e8e}.btn-d:hover{background:rgba(255,107,107,.15)}.btn-sm{min-height:30px;padding:6px 12px;font-size:11px}.btn-xxs{min-height:25px;padding:4px 9px;font-size:10px;border-radius:7px}.btn:disabled{opacity:.42;cursor:not-allowed;transform:none;box-shadow:none}
+.card{background:linear-gradient(180deg,rgba(22,29,42,.94),rgba(15,20,29,.94));border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:18px;margin-bottom:16px;box-shadow:var(--soft)}.card:hover{border-color:rgba(113,215,255,.18)}.card h3{font-size:12px;margin-bottom:13px;color:var(--tx);font-weight:800}.card h3::after{content:'';display:block;width:32px;height:2px;margin-top:8px;border-radius:2px;background:linear-gradient(90deg,var(--ac),transparent)}.toolbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:16px;padding:18px;background:linear-gradient(135deg,rgba(113,215,255,.08),rgba(139,124,255,.045));border:1px solid rgba(255,255,255,.08);border-radius:12px;box-shadow:var(--soft)}.page-title{font-size:18px;font-weight:900;color:var(--tx);margin-bottom:4px}.page-subtitle{font-size:12px;color:var(--mut)}.project-card{cursor:pointer;position:relative;overflow:hidden}.project-card::before{content:'';position:absolute;inset:0 0 auto 0;height:1px;background:linear-gradient(90deg,transparent,rgba(113,215,255,.45),transparent);opacity:.7}.project-card strong{font-size:14px}.project-card .meta{font-size:11px;color:var(--dim);margin-top:7px}.project-head{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;padding:14px 16px;border:1px solid rgba(255,255,255,.08);border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.018));box-shadow:var(--soft)}.back-btn{width:32px;height:32px;border-radius:9px;background:rgba(255,255,255,.04);border:1px solid var(--brd);color:var(--mut);font-size:16px}.back-btn:hover{color:var(--tx);border-color:var(--ac)}.project-title{font-size:16px;font-weight:900}.project-meta{font-size:11px;color:var(--dim)}
+.badge{display:inline-flex;align-items:center;padding:4px 9px;border-radius:999px;font-size:10px;font-weight:800;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.05);color:var(--mut)}.badge-draft{color:var(--dim)}.badge-generating,.badge-rendering,.badge-strategy_generating,.badge-analyzing{color:#ffd27a;background:rgba(242,197,107,.1);border-color:rgba(242,197,107,.25)}.badge-done,.badge-strategy_ready,.badge-analyzed{color:#76f3a1;background:rgba(74,222,128,.1);border-color:rgba(74,222,128,.24)}.badge-failed{color:#ff8d8d;background:rgba(255,107,107,.1);border-color:rgba(255,107,107,.28)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:12px}.thumb{aspect-ratio:1;border-radius:9px;overflow:hidden;border:1px solid var(--brd);background:#090d14;position:relative;box-shadow:0 10px 24px rgba(0,0,0,.25)}.thumb img{width:100%;height:100%;object-fit:cover;display:block}.thumb .idx{position:absolute;top:7px;left:7px;background:rgba(7,10,15,.78);border:1px solid rgba(255,255,255,.12);color:#fff;font-size:10px;font-weight:800;width:22px;height:22px;border-radius:7px;display:flex;align-items:center;justify-content:center}.thumb .del{position:absolute;top:7px;right:7px;background:rgba(7,10,15,.78);border:1px solid rgba(255,107,107,.35);color:var(--rd);width:22px;height:22px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;opacity:0;transition:opacity .2s}.thumb:hover .del{opacity:1}
+.upload-zone{display:block;border:1px dashed rgba(113,215,255,.28);border-radius:10px;padding:28px;text-align:center;color:var(--mut);transition:all .18s;cursor:pointer;margin-bottom:14px;background:linear-gradient(180deg,rgba(113,215,255,.045),rgba(255,255,255,.018))}.upload-zone:hover,.upload-zone.drag{border-color:var(--ac);color:var(--tx);background:rgba(113,215,255,.08)}.upload-zone .icon{font-size:28px;margin-bottom:8px}.upload-zone p{font-size:12px;line-height:1.6}.upload-zone input{display:none}.fld{display:flex;flex-direction:column;gap:6px}.fld label{font-size:10px;color:var(--dim);font-weight:800;text-transform:uppercase;letter-spacing:.5px}.fld input,.fld select,.fld textarea,.shot-table input,.shot-table textarea,.modal input,.modal select{background:#0b1018;border:1px solid var(--brd);border-radius:8px;color:var(--tx);font-size:12px;padding:9px 10px;transition:border-color .16s,box-shadow .16s,background .16s}.fld input:focus,.fld select:focus,.fld textarea:focus,.shot-table input:focus,.shot-table textarea:focus,.modal input:focus,.modal select:focus{border-color:rgba(113,215,255,.65);box-shadow:0 0 0 3px rgba(113,215,255,.1);background:#0d1420}.fld textarea{resize:vertical;min-height:72px}
+.sel-card{min-height:84px;padding:12px;border-radius:10px;border:1px solid var(--brd);background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.012));text-align:left;cursor:pointer;transition:all .15s;font-size:11px;position:relative;overflow:hidden}.sel-card:hover{border-color:rgba(113,215,255,.45);background:rgba(113,215,255,.055)}.sel-card.on{border-color:var(--ac);background:linear-gradient(180deg,rgba(113,215,255,.14),rgba(139,124,255,.07))}.sel-card .ic{font-size:18px;display:inline-flex;width:26px}.sel-card .lb{font-weight:850;font-size:11px;color:var(--tx)}.sel-card .ht{display:block;font-size:10px;line-height:1.35;color:var(--dim);margin-top:6px;text-align:left}
+.canvas-area{display:flex;gap:16px}.canvas-main{flex:1;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 20%,rgba(113,215,255,.08),transparent 36%),#0b1018;border:1px solid var(--brd);border-radius:10px;min-height:480px;position:relative;overflow:hidden}.canvas-main img{max-width:100%;max-height:72vh;border-radius:8px;box-shadow:0 24px 70px rgba(0,0,0,.42)}.canvas-side{width:320px;flex-shrink:0;display:flex;flex-direction:column;gap:12px}.result-meta{background:linear-gradient(135deg,rgba(113,215,255,.1),rgba(139,124,255,.06));border:1px solid rgba(113,215,255,.22);border-left:3px solid var(--ac);padding:13px;border-radius:9px}.result-meta .core{font-size:12px;font-weight:800;color:#fff;margin-bottom:4px}.result-headline{font-size:20px;font-weight:900;color:#fff;line-height:1.2}.result-bullets{font-size:11px;color:var(--mut);margin-top:8px}.result-bullets div{padding:3px 0 3px 13px;position:relative}.result-bullets div::before{content:'-';position:absolute;left:0;color:var(--ac)}
+.thumb-nav{display:flex;gap:9px;overflow-x:auto;padding:10px 0}.thumb-nav .tn-item{flex-shrink:0;width:82px;height:82px;border-radius:9px;overflow:hidden;border:1px solid var(--brd);cursor:pointer;opacity:.58;transition:all .2s;position:relative;background:#080c12}.thumb-nav .tn-item.active{border-color:var(--ac);opacity:1;box-shadow:0 0 0 3px rgba(113,215,255,.1)}.thumb-nav .tn-item img{width:100%;height:100%;object-fit:cover}.thumb-nav .tn-item .tn-label{position:absolute;bottom:0;left:0;right:0;background:rgba(3,6,10,.78);color:#fff;font-size:8px;padding:3px 4px;text-align:center}.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:100;justify-content:center;align-items:center;backdrop-filter:blur(12px)}.modal-overlay.show{display:flex}.modal{background:linear-gradient(180deg,#161d2a,#101620);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:24px;width:460px;max-width:90vw;box-shadow:var(--shadow)}.modal h3{font-size:15px;margin-bottom:16px}.modal input,.modal select{width:100%;margin-bottom:10px}.modal .acts{display:flex;gap:8px;justify-content:flex-end;margin-top:8px}.spin{width:17px;height:17px;border:2px solid rgba(255,255,255,.14);border-top-color:var(--ac);border-radius:50%;animation:spin .7s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}.status-bar{display:flex;align-items:center;gap:9px;font-size:12px;color:var(--mut);padding:9px 0}
+.steps{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:18px}.step-item{text-align:left;padding:11px 12px;border-radius:9px;font-size:11px;font-weight:800;background:rgba(255,255,255,.025);border:1px solid var(--brd);color:var(--dim);transition:all .2s}.step-item.active{border-color:rgba(113,215,255,.58);color:var(--ac);background:rgba(113,215,255,.09)}.step-item.done{border-color:rgba(74,222,128,.42);color:#8af7ae;background:rgba(74,222,128,.07)}.step-item.failed{border-color:rgba(255,107,107,.44);color:#ff8d8d}.shot-table{width:100%;border-collapse:separate;border-spacing:0;font-size:11px;margin-bottom:14px;border:1px solid rgba(255,255,255,.07);border-radius:10px;overflow:hidden;background:#0b1018}.shot-table th{text-align:left;padding:9px 10px;color:var(--dim);font-size:10px;border-bottom:1px solid var(--brd);white-space:nowrap;background:#101722;text-transform:uppercase;letter-spacing:.35px}.shot-table td{padding:9px 10px;border-bottom:1px solid rgba(255,255,255,.055);vertical-align:top}.shot-table tr:last-child td{border-bottom:none}.shot-table textarea{width:100%;font-size:11px;resize:vertical;min-height:58px;font-family:inherit}.shot-table .shot-idx{width:34px;text-align:center;font-weight:900;color:var(--ac)}.shot-table .shot-name{min-width:128px;font-weight:750;font-size:11px;color:var(--tx)}.shot-table .shot-prompt-col{min-width:320px}.ana-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;font-size:11px}.ana-grid>div{background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.055);border-radius:8px;padding:8px}.ana-grid .ak{color:var(--dim);font-size:10px;font-weight:800}.ana-grid .av{color:var(--mut);line-height:1.45}.step-actions{display:flex;gap:9px;margin-top:14px;flex-wrap:wrap}.shot-status-ok{color:var(--gr);font-size:11px}.shot-status-err{color:var(--rd);font-size:11px}.shot-status-pending{color:var(--dim);font-size:11px}@media(max-width:980px){.app{padding:18px}.header{margin:-18px -18px 18px;padding:14px 18px}.g3,.g2{grid-template-columns:1fr}.steps{grid-template-columns:1fr}.canvas-area{flex-direction:column}.canvas-side{width:100%}.shot-table{display:block;overflow-x:auto}.g4{grid-template-columns:1fr 1fr}}
+
+</style>
+</head>
+<body>
+<div class="app">
+<div class="header">
+  <h1><span>&bull;</span> Ozon 商品图工作台</h1>
+  <div class="tabs">
+    <button class="tab-btn active" id="tabV" onclick="switchTab('video')">视频工作流</button>
+    <button class="tab-btn" id="tabI" onclick="switchTab('image')">商品图工作台</button>
+  </div>
+</div>
+
+<!-- ====== VIDEO TAB ====== -->
+<div id="viewVideo">
+  <div class="toolbar"><div><div class="page-title">商品图工作台</div><div class="page-subtitle">参考图锁定外观，9张 Ozon 商品图策略，一体成型生成</div></div><button class="btn btn-p" onclick="showNewIProject()">+ 新建生图项目</button></div>
+  <div id="iList"></div>
+  <div id="iDetail" style="display:none"></div>
+</div>
+</div>
+
+<!-- New Video Modal -->
+<div class="modal-overlay" id="modalV">
+  <div class="modal"><h3>新建视频项目</h3>
+    <input type="text" id="vName" placeholder="项目名称">
+    <div class="acts"><button class="btn btn-o btn-sm" onclick="hideM('modalV')">取消</button><button class="btn btn-p btn-sm" onclick="createVProject()">创建</button></div>
+  </div>
+</div>
+
+<!-- New Image Modal -->
+<div class="modal-overlay" id="modalI">
+  <div class="modal"><h3>新建生图项目</h3>
+    <input type="text" id="iName" placeholder="项目名称">
+    <div class="g2"><div class="fld"><label>风格</label><select id="iStyle"></select></div><div class="fld"><label>比例</label><select id="iRatio"><option value="1:1">1:1 正方形</option><option value="9:16">9:16 竖屏</option><option value="4:5">4:5 信息流</option><option value="3:4">3:4 Ozon详情图</option><option value="16:9">16:9 横幅</option></select></div></div>
+    <div class="acts"><button class="btn btn-o btn-sm" onclick="hideM('modalI')">取消</button><button class="btn btn-p btn-sm" onclick="createIProject()">创建</button></div>
+  </div>
+</div>
+
+<script>
+// ====== GLOBALS ======
+const API='/api', IMG_API='/api/image';
+let vCur=null, iCur=null, imgStyles=[], imgStyleData={};
+
+// ====== TAB SWITCH ======
+async function switchTab(t){
+  document.getElementById('viewVideo').style.display=t==='video'?'block':'none';
+  document.getElementById('viewImage').style.display=t==='image'?'block':'none';
+  document.getElementById('tabV').classList.toggle('active',t==='video');
+  document.getElementById('tabI').classList.toggle('active',t==='image');
+  if(t==='video') loadVProjects();
+  if(t==='image'){await loadIStyles();loadIProjects();}
+}
+
+// ====== VIDEO TAB ======
+async function loadVProjects(){
+  const res=await fetch(`${API}/projects`);const ps=await res.json();
+  const el=document.getElementById('vList');
+  if(!ps.length){el.innerHTML='<div class="card" style="text-align:center;color:var(--dim);padding:40px">还没有视频项目</div>';return}
+  el.innerHTML=ps.map(p=>`<div class="card project-card" onclick="openVProject('${p.id}')"><div style="display:flex;justify-content:space-between;align-items:center"><strong>${esc(p.name)}</strong><span class="badge badge-${p.status}">${sl(p.status)}</span></div><div style="font-size:11px;color:var(--dim);margin-top:4px">${p.image_count} 张图 · ${p.created.slice(0,10)}</div></div>`).join('');
+}
+function showNewVProject(){document.getElementById('modalV').classList.add('show');document.getElementById('vName').focus()}
+function hideM(id){document.getElementById(id).classList.remove('show')}
+async function createVProject(){
+  const n=document.getElementById('vName').value.trim();if(!n)return;
+  const fd=new FormData();fd.append('name',n);
+  const r=await fetch(`${API}/projects`,{method:'POST',body:fd});const p=await r.json();
+  hideM('modalV');document.getElementById('vName').value='';openVProject(p.id);
+}
+async function openVProject(pid){
+  vCur=pid;
+  const[pr,imgs,bgms]=await Promise.all([fetch(`${API}/projects`).then(r=>r.json()),fetch(`${API}/projects/${pid}/images`).then(r=>r.json()),fetch(`${API}/bgm`).then(r=>r.json())]);
+  const p=pr.find(x=>x.id===pid);if(!p)return;
+  document.getElementById('vList').style.display='none';
+  const d=document.getElementById('vDetail');d.style.display='block';
+  d.innerHTML=`<div style="display:flex;align-items:center;gap:10px;margin-bottom:14px"><button style="background:none;color:var(--dim);font-size:18px;cursor:pointer" onclick="document.getElementById('vDetail').style.display='none';document.getElementById('vList').style.display='block';loadVProjects()">←</button><strong>${esc(p.name)}</strong><span class="badge badge-${p.status}">${sl(p.status)}</span><div style="flex:1"></div><button class="btn btn-d" onclick="delVProject('${pid}')">删除</button></div>
+  <div class="upload-zone" id="vUpload" onclick="document.getElementById('vFile').click()" ondragover="this.classList.add('drag');event.preventDefault()" ondragleave="this.classList.remove('drag')" ondrop="dropVFiles(event,'${pid}')"><div class="icon">📁</div><p>拖拽分镜图 / 点击上传</p><input type="file" id="vFile" multiple accept="image/*" onchange="uploadVFiles('${pid}')"></div>
+  ${imgs.length?`<div class="gallery">${imgs.map((x,i)=>`<div class="thumb"><img src="${API}/projects/${pid}/image/${x.name}?t=${Date.now()}"><div class="idx">${i+1}</div></div>`).join('')}</div>`:''}
+  ${p.has_video?`<div class="card"><video controls style="max-width:280px;border-radius:8px" src="${API}/projects/${pid}/download?t=${Date.now()}"></video><br><button class="btn btn-p btn-sm" style="margin-top:8px" onclick="window.open('${API}/projects/${pid}/download','_blank')">⬇ 下载视频</button></div>`:''}
+  
+  ${imgs.length?`<div class="card"><h3>📝 分镜提示词编辑</h3>${imgs.map((x,i)=>`<div style="display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--brd)"><div class="thumb" style="width:48px;height:64px;flex-shrink:0"><img src="${API}/projects/${pid}/image/${x.name}?t=${Date.now()}"><div class="idx">${i+1}</div></div><div class="fld" style="flex:1"><textarea id="shotPrompt_${i}" style="width:100%;background:var(--bg);border:1px solid var(--brd);border-radius:6px;color:var(--tx);font-size:11px;padding:6px 8px;resize:vertical;min-height:40px;font-family:inherit" placeholder="分镜${i+1}专属Prompt (留空使用全局)"></textarea></div></div>`).join('')}</div>`:''}
+<div class="card"><h3>⚙ 生成设置</h3><div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end"><div class="fld"><label>全局 Prompt</label><input type="text" id="vPrompt" value="smooth cinematic product shot, professional lighting, 4K"></div><div class="fld"><label>字幕</label><input type="text" id="vCaption" placeholder="品牌标语"></div><div class="fld"><label>BGM</label><select id="vBgm"><option value="">无</option>${bgms.map(f=>`<option>${f}</option>`).join('')}</select></div><div class="fld"><label>模型</label><select id="vModel"><optgroup label="Veo"><option value="veo-3.1-fast">Veo 3.1 Fast</option></optgroup><optgroup label="即梦"><option value="jimeng-i2v-1080">即梦 3.0 Pro</option></optgroup><optgroup label="Kling"><option value="kling-v1-6">Kling 1.6</option></optgroup></select></div><div class="fld" style="justify-content:flex-end"><button class="btn btn-p" id="vGenBtn" onclick="startVGen('${pid}')" ${!imgs.length||p.status==='generating'?'disabled':''}>⚡ 生成</button></div></div>${p.status==='generating'?`<div class="status-bar"><div class="spin"></div>${p.message||'生成中...'}</div><script>setTimeout(()=>openVProject('${pid}'),5000)<\/script>`:''}</div>`;
+}
+async function uploadVFiles(pid){const f=document.getElementById('vFile');if(!f.files.length)return;const fd=new FormData();for(const x of f.files)fd.append('files',x);await fetch(`${API}/projects/${pid}/upload`,{method:'POST',body:fd});f.value='';openVProject(pid)}
+async function dropVFiles(e,pid){e.preventDefault();e.currentTarget.classList.remove('drag');const fd=new FormData();for(const x of e.dataTransfer.files)fd.append('files',x);await fetch(`${API}/projects/${pid}/upload`,{method:'POST',body:fd});openVProject(pid)}
+async function startVGen(pid){const b=document.getElementById('vGenBtn');b.disabled=true;b.textContent='排队中...';const fd=new FormData();fd.append('prompt',document.getElementById('vPrompt')?.value||'');fd.append('caption',document.getElementById('vCaption')?.value||'');fd.append('bgm_name',document.getElementById('vBgm')?.value||'');fd.append('model_name',document.getElementById('vModel')?.value||'kling-v1-6');fd.append('resolution','1080x1920');fd.append('fps','30');fd.append('crf','20');await fetch(`${API}/projects/${pid}/generate`,{method:'POST',body:fd});openVProject(pid)}
+async function delVProject(pid){if(!confirm('确认删除？'))return;await fetch(`${API}/projects/${pid}`,{method:'DELETE'});document.getElementById('vDetail').style.display='none';document.getElementById('vList').style.display='block';loadVProjects()}
+
+// ====== IMAGE TAB ======
+let imgPlat='TikTok',imgTrig='Impulse',iPollTimer=null;
+
+async function loadIStyles(){
+  try{const r=await fetch(`${IMG_API}/styles`);imgStyleData=await r.json();imgStyles=imgStyleData.styles||[];
+  const sel=document.getElementById('iStyle');if(sel&&!sel.options.length)sel.innerHTML=imgStyles.map(s=>`<option value="${s.id}">${s.name}</option>`).join('');}
+  catch(e){}
+}
+async function loadIProjects(){
+  const r=await fetch(`${IMG_API}/projects`);const ps=await r.json();
+  const el=document.getElementById('iList');
+  if(!ps.length){el.innerHTML='<div class="card" style="text-align:center;color:var(--dim);padding:40px">还没有生图项目</div>';return}
+  el.innerHTML=ps.map(p=>`<div class="card project-card" onclick="openIProject('${p.id}')"><div style="display:flex;justify-content:space-between;align-items:center"><strong>${esc(p.name)}</strong><span class="badge badge-${p.status}">${sl(p.status)}</span></div><div style="font-size:11px;color:var(--dim);margin-top:4px">${p.image_count} 张参考图 · ${p.style} · ${p.ratio} · ${p.created.slice(0,10)}</div></div>`).join('');
+}
+function showNewIProject(){var m=document.getElementById('modalI');if(m){m.classList.add('show');loadIStyles();setTimeout(function(){var f=document.getElementById('iName');if(f)f.focus()},200)}}
+async function createIProject(){
+  const n=document.getElementById('iName').value.trim();if(!n)return;
+  const fd=new FormData();fd.append('name',n);fd.append('style',document.getElementById('iStyle').value);fd.append('ratio',document.getElementById('iStyle').value);
+  const r=await fetch(`${IMG_API}/projects`,{method:'POST',body:fd});const p=await r.json();
+  hideM('modalI');document.getElementById('iName').value='';openIProject(p.id);
+}
+
+function stopIPoll(){if(iPollTimer){clearInterval(iPollTimer);iPollTimer=null;}}
+
+function _stepClass(s,n){const steps=['upload','configure','analyzed','strategy_ready','done'];const i=steps.indexOf(s);if(i<0)return s===n?'active':'';const ni=steps.indexOf(n);return i>ni?'done':i===ni?'active':'';}
+
+async function openIProject(pid){
+  stopIPoll();iCur=pid;
+  const ts=Date.now();
+  const[pr,results,strategy]=await Promise.all([fetch(`${IMG_API}/projects?t=${ts}`).then(r=>r.json()),fetch(`${IMG_API}/projects/${pid}/results?t=${ts}`).then(r=>r.json()).catch(()=>[]),fetch(`${IMG_API}/projects/${pid}/strategy?t=${ts}`).then(r=>r.json()).catch(()=>null)]);
+  const p=pr.find(x=>x.id===pid);if(!p)return;
+  await loadIStyles();
+  document.getElementById('iList').style.display='none';
+  const d=document.getElementById('iDetail');d.style.display='block';
+  window._iResults=results;window._iCur=0;window._iStrategyCache=strategy;
+
+  const imgs=p.images||[],analysis=p.product_analysis;
+  const wstep=(p.status==='done')?'done':(p.status==='strategy_ready')?'strategy_ready':(p.status==='analyzed')?'analyzed':(p.workflow_step&&p.workflow_step!=='upload')?p.workflow_step:(imgs.length?'configure':'upload');
+  const plats=imgStyleData.platforms||[],trigs=imgStyleData.triggers||[];
+  const curPlat=p.platform||'TikTok',curTrig=p.trigger||'Impulse';
+
+  const stepBar=`<div class="steps">
+    <div class="step-item ${_stepClass(wstep,'upload')}">1. 上传</div>
+    <div class="step-item ${_stepClass(wstep,'configure')}">2. 配置</div>
+    <div class="step-item ${_stepClass(wstep,'analyzed')}">3. 分析</div>
+    <div class="step-item ${_stepClass(wstep,'strategy_ready')}">4. 策略</div>
+    <div class="step-item ${_stepClass(wstep,'done')}">5. 渲染</div>
+  </div>`;
+
+  let html=`<div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap"><button style="background:none;color:var(--dim);font-size:18px;cursor:pointer" onclick="stopIPoll();document.getElementById('iDetail').style.display='none';document.getElementById('iList').style.display='block';loadIProjects()">←</button><strong>${esc(p.name)}</strong><span class="badge badge-${p.status}">${sl(p.status)}</span><span style="font-size:11px;color:var(--dim)">${p.style} · ${p.ratio}</span><div style="flex:1"></div><button class="btn btn-d" onclick="delIProject('${pid}')">删除</button></div>`;
+  html+=stepBar;
+
+  // ---- STEP 1: Upload ----
+  html+=`<div class="card"><h3>📁 参考产品图</h3><div class="upload-zone" onclick="document.getElementById('iFile_${pid}').click()" ondragover="event.preventDefault();event.currentTarget.classList.add('drag')" ondragleave="event.currentTarget.classList.remove('drag')" ondrop="event.preventDefault();dropIFiles(event,'${pid}')"><div class="icon">📁</div><p>拖拽或点击上传产品图 (锁定外观)</p><p style="font-size:10px;color:var(--dim)">JPG/PNG · 建议 3-5 张不同角度</p><input type="file" id="iFile_${pid}" multiple accept="image/*" onchange="uploadIFiles('${pid}')"></div>`;
+  if(imgs.length){
+    html+=`<div class="gallery" style="margin-bottom:10px">${imgs.map((n,i)=>`<div class="thumb"><img src="${IMG_API}/projects/${pid}/image/${n}?t=${Date.now()}"><div class="idx">${i+1}</div><div class="del" onclick="event.stopPropagation();removeIImage('${pid}','${n}')">×</div></div>`).join('')}</div>`;
+  }
+  html+=`</div>`;
+
+  // ---- STEP 2: Configure ----
+  html+=`<div class="card"><h3>⚙ 市场环境 & 风格</h3>`;
+  html+=`<div class="g3" style="margin-bottom:10px">${plats.map(x=>`<div class="sel-card ${curPlat===x.id?'on':''}" onclick="selPlatform(this,'${x.id}')"><span class="ic">${x.icon}</span><span class="lb">${x.name}</span><span class="ht">${x.hint}</span></div>`).join('')}</div>`;
+  html+=`<div class="g3" style="margin-bottom:10px">${trigs.map(x=>`<div class="sel-card ${curTrig===x.id?'on':''}" onclick="selTrigger(this,'${x.id}')"><span class="ic">${x.icon}</span><span class="lb">${x.name}</span><span class="ht">${x.hint}</span></div>`).join('')}</div>`;
+  html+=`<div class="g2"><div class="fld"><label>风格</label><select id="i??Edit">${imgStyles.map(s=>`<option value="${s.id}" ${s.id===p.style?'selected':''}>${s.name}</option>`).join('')}</select></div><div class="fld"><label>比例</label><select id="i??Edit"><option value="1:1" ${p.ratio==='1:1'?'selected':''}>1:1 正方 (Amazon)</option><option value="9:16" ${p.ratio==='9:16'?'selected':''}>9:16 竖屏 (TikTok)</option><option value="4:5" ${p.ratio==='4:5'?'selected':''}>4:5 竖向 (Ins)</option><option value="3:4" ${p.ratio==='3:4'?'selected':''}>3:4 详情 (Ozon)</option><option value="16:9" ${p.ratio==='16:9'?'selected':''}>16:9 横版</option></select></div></div>`;
+  html+=`<div class="fld" style="margin-top:8px"><label>产品描述 (越详细越好)</label><textarea id="iDesc" style="width:100%;background:var(--bg);border:1px solid var(--brd);border-radius:6px;color:var(--tx);font-size:12px;padding:10px;resize:vertical;min-height:60px" placeholder="产品名称、材质、功能、尺寸、目标人群、使用场景...">${esc(p.description||p.name||'')}</textarea></div>`;
+  html+=`</div>`;
+
+  // ---- STEP 3: Analyze ----
+  html+=`<div class="card"><h3>🔍 产品特征分析</h3>`;
+  if(analysis){
+    html+=`<div class="ana-grid">`;
+    for(const[k,v]of Object.entries(analysis)){
+      const val=Array.isArray(v)?v.join(', '):String(v||'');
+      html+=`<div><span class="ak">${k}:</span> <span class="av">${esc(val)}</span></div>`;
+    }
+    html+=`</div>`;
+  }else{
+    html+=`<p style="font-size:11px;color:var(--dim);margin-bottom:10px">GPT-4o 将分析你的产品图，提取材质、颜色、纹理、特征等视觉信息，确保生成图与实物一致。</p>`;
+  }
+  html+=`<div class="step-actions"><button class="btn btn-ac btn-sm" id="iAnaBtn" onclick="runAnalyze('${pid}')" ${!imgs.length?'disabled':''}>${analysis?'🔄 重新分析产品':'🔍 分析产品特征'}</button></div>`;
+  if(p.status==='analyzing') html+=`<div class="status-bar"><div class="spin"></div>${p.message||'分析中...'}</div>`;
+  html+=`</div>`;
+
+  // ---- STEP 4: Strategy ----
+  html+=`<div class="card"><h3>📋 9-Shot 转化策略</h3>`;
+  if(strategy&&strategy.shots){
+    html+=`<table class="shot-table"><thead><tr><th>#</th><th>角度</th><th>俄语标题</th><th>中文翻译</th><th>提示词 (img_prompt)</th><th>状态</th><th></th></tr></thead><tbody>`;
+    for(const s of strategy.shots){
+      const rid=s.id,hasRes=results.find(r=>r.id===rid&&!r.error);
+      html+=`<tr>
+        <td class="shot-idx">${rid}</td>
+        <td class="shot-name">${esc(s.angle_name||'Shot '+rid)}<br><span style="font-size:9px;color:var(--dim)">${esc(s.angle_name_cn||'')}</span></td>
+        <td><input value="${esc(s.headline||'')}" id="iShHl_${rid}" style="width:100%;background:var(--bg);border:1px solid var(--brd);border-radius:4px;color:var(--tx);font-size:11px;padding:3px 5px"></td>
+        <td><input value="${esc(s.headline_cn||'')}" id="iShHlCn_${rid}" style="width:100%;background:var(--bg);border:1px solid var(--brd);border-radius:4px;color:var(--tx);font-size:11px;padding:3px 5px"></td>
+        <td class="shot-prompt-col"><textarea id="iShPr_${rid}">${esc(s.img_prompt||'')}</textarea></td>
+        <td>${hasRes?`<span class="shot-status-ok">✓</span>`:`<span class="shot-status-pending">-</span>`}</td>
+        <td><button class="btn btn-o btn-xxs" onclick="renderOneShot('${pid}',${rid})" ${p.status==='rendering'?'disabled':''}>生成</button></td>
+      </tr>`;
+    }
+    html+=`</tbody></table>`;
+  }else{
+    html+=`<p style="font-size:11px;color:var(--dim);margin-bottom:10px">GPT-4o 根据产品分析 + 市场环境生成 9 张图的转化策略。你可以编辑每张图的提示词。</p>`;
+  }
+  html+=`<div class="step-actions">
+    <button class="btn btn-ac btn-sm" id="iStrBtn" onclick="runStrategyGen('${pid}')" ${!imgs.length?'disabled':''}>${strategy?'🔄 重新生成策略':'🧠 生成 9-Shot 策略'}</button>
+    ${strategy?`<button class="btn btn-gr btn-sm" id="iSaveBtn" onclick="saveStrategy('${pid}')">💾 保存编辑</button>`:''}
+    ${strategy?`<button class="btn btn-p btn-sm" id="iRenAllBtn" onclick="renderAllShots_('${pid}')" ${p.status==='rendering'?'disabled':''}>🚀 批量生成全部 9 张</button>`:''}
+  </div>`;
+  if(p.status==='strategy_generating') html+=`<div class="status-bar"><div class="spin"></div>${p.message||'策略生成中...'}</div>`;
+  html+=`</div>`;
+
+  // ---- STEP 5: Render Results ----
+  if(results.length){
+    html+=`<div class="card"><h3>🖼 渲染结果</h3>`;
+    html+=`<div style="display:grid;grid-template-columns:1fr 300px;gap:12px">`;
+    const firstOK=results.find(r=>r.saved_path&&!r.error);
+html+=`<div class="canvas-main" style="background:var(--card);border-radius:12px;min-height:400px;display:flex;align-items:center;justify-content:center">${firstOK?`<img id="iMainImg" src="${IMG_API}/projects/${pid}/shot/${firstOK.saved_path}" alt="" style="max-width:100%;max-height:65vh;border-radius:8px">`:`<span style="color:var(--dim)">渲染中...</span>`}</div>`;
+    html+=`<div>`;
+    const s0=results[0];
+    if(s0&&!s0.error){
+      html+=`<div class="result-meta" style="margin-bottom:10px"><div class="core">${esc(strategy?.desire_core_pt||'')}</div><div style="font-size:10px;color:var(--dim)">${esc(strategy?.desire_core_cn||'')}</div></div>`;
+      html+=`<div class="result-headline" style="margin-bottom:4px">${esc(s0.headline||'')}</div><div class="result-bullets">${(s0.bullets||[]).map(b=>`<div>${esc(b)}</div>`).join('')}</div>`;
+    }
+    html+=`<button class="btn btn-p btn-sm" style="width:100%;margin-top:8px" onclick="downloadAllI('${pid}')">⬇ 打包下载</button>`;
+    html+=`</div></div>`;
+    html+=`<div class="thumb-nav" style="margin-top:8px">${results.map((r,i)=>r.error||!r.saved_path?`<div class="tn-item" style="border-color:var(--rd);opacity:1;display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--rd);cursor:default">${r.error?'失败':'等待'}</div>`:`<div class="tn-item ${r.saved_path===firstOK?.saved_path?'active':''}" onclick="selIShot(${i})"><img src="${IMG_API}/projects/${pid}/shot/${r.saved_path}"><div class="tn-label">${r.angle_name||'Shot '+(i+1)}</div></div>`).join('')}</div>`;
+    html+=`</div>`;
+  }
+  const hasRes = results && results.length > 0;
+  const allOK = hasRes && results.every(r => r.error || r.saved_path);
+  const busy = ['analyzing','strategy_generating','rendering','generating'];
+  const progress = p.progress || 0;
+  if(busy.includes(p.status) || (hasRes && !allOK)){
+    html+=`<div class="card" style="margin-top:12px"><div style="display:flex;align-items:center;gap:10px;margin-bottom:6px"><div class="spin"></div><span style="font-size:12px">${p.message||'处理中...'}</span><span style="font-size:11px;color:var(--ac);margin-left:auto">${progress}%</span></div><div style="background:var(--brd);border-radius:4px;height:6px;overflow:hidden"><div style="background:var(--ac);height:100%;width:${progress}%;transition:width .5s;border-radius:4px"></div></div></div>`;
+    if(!iPollTimer) iPollTimer=setInterval(()=>openIProject(pid),2000);
+  }else if(!hasRes && (p.status==='done'||p.status==='failed')){
+    stopIPoll();
+  }
+
+  d.innerHTML=html;
+  // Restore platform/trigger globals
+  imgPlat=curPlat;imgTrig=curTrig;
+}
+
+// ---- Image Step Actions ----
+function selPlatform(el,id){imgPlat=id;el.parentElement.querySelectorAll('.sel-card').forEach(c=>c.classList.remove('on'));el.classList.add('on')}
+function selTrigger(el,id){imgTrig=id;el.parentElement.querySelectorAll('.sel-card').forEach(c=>c.classList.remove('on'));el.classList.add('on')}
+
+async function uploadIFiles(pid){const f=document.getElementById('iFile_'+pid);if(!f||!f.files.length)return;const zone=f.closest('.upload-zone');if(zone)zone.style.opacity='0.5';const fd=new FormData();for(const x of f.files)fd.append('files',x);try{const r=await fetch(`${IMG_API}/projects/${pid}/upload`,{method:'POST',body:fd});if(!r.ok){const msg=(await r.json()).detail||r.statusText;throw new Error(msg)}f.value='';openIProject(pid)}catch(e){alert('上传失败: '+e.message);if(zone)zone.style.opacity='1'}}
+async function dropIFiles(e,pid){e.preventDefault();e.currentTarget.classList.remove('drag');try{const fd=new FormData();for(const x of e.dataTransfer.files)fd.append('files',x);const r=await fetch(`${IMG_API}/projects/${pid}/upload`,{method:'POST',body:fd});if(!r.ok)throw new Error((await r.json()).detail||r.statusText);openIProject(pid)}catch(err){alert('上传失败: '+err.message)}}
+async function removeIImage(pid,name){await fetch(`${IMG_API}/projects/${pid}/image/${encodeURIComponent(name)}`,{method:'DELETE'});openIProject(pid)}
+
+async function runAnalyze(pid){
+  const b=document.getElementById('iAnaBtn');if(b){b.disabled=true;b.textContent='GPT-4o 分析中...';}
+  await fetch(`${IMG_API}/projects/${pid}/analyze`,{method:'POST'});
+  stopIPoll();iPollTimer=setInterval(()=>openIProject(pid),2000);
+}
+async function runStrategyGen(pid){
+  const b=document.getElementById('iStrBtn');if(b){b.disabled=true;b.textContent='策略生成中...';}
+  const fd=new FormData();fd.append('platform',imgPlat);fd.append('trigger',imgTrig);
+  fd.append('style',document.getElementById('i??Edit')?.value||'');fd.append('ratio',document.getElementById('i??Edit')?.value||'');
+  fd.append('description',document.getElementById('iDesc')?.value||'');
+  // Save config + generate strategy only (no render)
+  await fetch(`${IMG_API}/projects/${pid}/strategy/generate`,{method:'POST',body:fd});
+  stopIPoll();iPollTimer=setInterval(()=>openIProject(pid),2000);
+}
+async function saveStrategy(pid,silent){
+  const strategy=window._iStrategyCache||(await fetch(`${IMG_API}/projects/${pid}/strategy?t=${Date.now()}`).then(r=>r.json()));
+  if(!strategy||!strategy.shots){if(!silent)alert('策略未加载');return false;}
+  for(const s of strategy.shots){
+    const hl=document.getElementById('iShHl_'+s.id);if(hl)s.headline=hl.value;
+    const hc=document.getElementById('iShHlCn_'+s.id);if(hc)s.headline_cn=hc.value;
+    const pr=document.getElementById('iShPr_'+s.id);if(pr)s.img_prompt=pr.value;
+  }
+  await fetch(`${IMG_API}/projects/${pid}/strategy/update`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({strategy})});
+  window._iStrategyCache=strategy;
+  if(!silent)alert('策略已保存');
+  return true;
+}
+async function renderAllShots_(pid){
+  const b=document.getElementById('iRenAllBtn');if(b){b.disabled=true;b.textContent='渲染中...';}
+  await saveStrategy(pid,true);
+  const fd=new FormData();fd.append('ratio',document.getElementById('i??Edit')?.value||'');
+  await fetch(`${IMG_API}/projects/${pid}/render`,{method:'POST',body:fd});
+  stopIPoll();iPollTimer=setInterval(()=>openIProject(pid),2000);
+}
+async function renderOneShot(pid,sid){
+  await saveStrategy(pid,true);
+  await fetch(`${IMG_API}/projects/${pid}/render/${sid}`,{method:'POST'});
+  stopIPoll();iPollTimer=setInterval(()=>openIProject(pid),2000);
+}
+
+async function delIProject(pid){stopIPoll();if(!confirm('确认删除？'))return;await fetch(`${IMG_API}/projects/${pid}`,{method:'DELETE'});document.getElementById('iDetail').style.display='none';document.getElementById('iList').style.display='block';loadIProjects()}
+function downloadAllI(pid){const rs=window._iResults||[];rs.forEach((r,i)=>{if(!r.error&&r.saved_path)setTimeout(()=>window.open(`${IMG_API}/projects/${pid}/shot/${r.saved_path}`,'_blank'),i*600)})}
+function selIShot(i){document.querySelectorAll('.tn-item').forEach((el,j)=>el.classList.toggle('active',j===i));const r=(window._iResults||[])[i];if(r&&!r.error&&r.saved_path){const el=document.getElementById('iMainImg');if(el)el.src=`${IMG_API}/projects/${iCur}/shot/${r.saved_path}`}}
+
+// ====== HELPERS ======
+function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function sl(s){return{draft:'??',generating:'???',rendering:'???',strategy_generating:'?????',strategy_ready:'????',analyzing:'???',analyzed:'???',done:'??',partial:'????',failed:'??'}[s]||s}
+
+// ====== INIT ======
+loadVProjects();loadIStyles();
+</script>
+</body>
+</html>
